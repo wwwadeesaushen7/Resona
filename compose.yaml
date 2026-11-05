@@ -1,0 +1,22 @@
+services:
+  api:
+    build: ./backend
+    env_file: .env.cloud
+    environment:
+      DATA_DIR: /app/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - studio-data:/app/data
+    restart: unless-stopped
+  worker:
+    build: ./backend
+    env_file: .env.cloud
+    environment:
+      DATA_DIR: /app/data
+    command: ["python", "-m", "app.worker"]
+    volumes:
+      - studio-data:/app/data
+    restart: unless-stopped
+volumes:
+  studio-data:
